@@ -4,10 +4,10 @@ let querys = {}
 //Consultas
 querys.getAnimes = "SELECT * FROM ANIME"
 
-querys.getSeries = "SELECT * FROM ANIME"
+querys.getSeries = "SELECT * FROM SERIES"
 
-querys.getVideogames = "SELECT * FROM ANIME"
+querys.getVideogames = "SELECT * FROM VIDEOJUEGOS"
 
-querys.getMovies = "SELECT * FROM ANIME"
+querys.getPeliculas = "SELECT * FROM PELICULAS"
 
 export default querys;

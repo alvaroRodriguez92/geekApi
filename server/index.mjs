@@ -1,5 +1,8 @@
 import express from "express"
 import animeRouter from "./routes/animeRouter.mjs"
+import seriesRouter from "./routes/seriesRouter.mjs"
+import videojuegosRouter from "./routes/videojuegosRouter.mjs"
+import peliculasRouter from "./routes/peliculasRouter.mjs"
 import logger from "morgan"
 import dotenv from "dotenv"
 
@@ -21,7 +24,13 @@ app.get("/", (req, res) => {
 })
 
 //Ruta seccion animes
-app.use("/anime",animeRouter)
+app.use("/anime",animeRouter);
+//Ruta seccion series
+app.use("/series",seriesRouter);
+//Ruta seccion videojuegos
+app.use("/videojuegos",videojuegosRouter);
+//Ruta seccion Peliculas
+app.use("/peliculas",peliculasRouter);
 
 
 app.listen(PORT, () => {
