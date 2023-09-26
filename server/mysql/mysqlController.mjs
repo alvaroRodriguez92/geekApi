@@ -1,11 +1,14 @@
 import db from "./mysqlConn.mjs";
 import querys from "./querys.mjs";
 
-//ANIME
+//***************
+//ANIMES*********
+//***************
 let animeQueries = {};
 
+//Query para obtener todos los animes
 animeQueries.getAnimes = async (id) => {
-  console.log("entrando")
+  console.log("entrando");
   let conn = null;
   try {
     conn = await db.createConnection();
@@ -13,60 +16,158 @@ animeQueries.getAnimes = async (id) => {
     return await db.query(querys.getAnimes, id, "select", conn);
   } catch (e) {
     throw new Error(e);
-  } finally{
-    conn &&  await conn.end(); //si existe la conexion se cierra
+  } finally {
+    conn && (await conn.end()); //si existe la conexion se cierra
   }
 };
 
-//VIDEOJUEGOS
+//Query para añadir un anime
+
+animeQueries.addAnime = async (newAnime) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    const anime = {
+      id: newAnime.id,
+      nombre: newAnime.nombre,
+      fecha: newAnime.fecha,
+      comentario: newAnime.comentario,
+      imagen: newAnime.imagen,
+      nota: newAnime.nota,
+    };
+
+    //db.query recibirá la sql query, params, type y la conexion
+    return await db.query(querys.addAnime, anime, "insert", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end()); //si existe la conexion se cierra
+  }
+};
+
+//***************
+//VIDEOJUEGOS****
+//***************
 let videogamesQueries = {};
 
+//Get videojuegos
 videogamesQueries.getVideojuegos = async (id) => {
   let conn = null;
-  try{
-     conn = await db.createConnection();
-     //db.query recibe la sqlquery, los params, type, y la conexion
-     return await db.query(querys.getVideogames, id, "select",conn)
-  }catch(e){
-    throw new Error(e);
-  
-} finally{
-  conn && await conn.end(); //si existe la conexion se cierra
-}
-}
-
-//SERIES
-let seriesQueries = {};
-
-seriesQueries.getSeries = async (id) => {
-  let conn = null
-  try{
+  try {
     conn = await db.createConnection();
     //db.query recibe la sqlquery, los params, type, y la conexion
-    return await db.query(querys.getSeries, id, "select",conn);
-  } catch (e){
+    return await db.query(querys.getVideogames, id, "select", conn);
+  } catch (e) {
     throw new Error(e);
-  } finally{
-    conn && await conn.end(); //si existe la conexion se cierra
+  } finally {
+    conn && (await conn.end()); //si existe la conexion se cierra
   }
-  
 };
 
-//PELICULAS
+//Añadir videojuegos
+videogamesQueries.addVideojuego = async (newVideojuego) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    const videojuego = {
+      id: newVideojuego.id,
+      nombre: newVideojuego.nombre,
+      fecha: newVideojuego.fecha,
+      comentario: newVideojuego.comentario,
+      imagen: newVideojuego.imagen,
+      nota: newVideojuego.nota,
+    };
+    return await db.query(querys.addVideojuego, videojuego, "insert", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end()); //Si existe la conexión se cierra
+  }
+};
+
+//***************
+//SERIES*********
+//***************
+let seriesQueries = {};
+
+//GET de todas las series
+seriesQueries.getSeries = async (id) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    //db.query recibe la sqlquery, los params, type, y la conexion
+    return await db.query(querys.getSeries, id, "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end()); //si existe la conexion se cierra
+  }
+};
+
+//Añadir serie
+
+seriesQueries.addSerie = async (newSerie) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    const serie = {
+      id: newSerie.id,
+      nombre: newSerie.nombre,
+      fecha: newSerie.fecha,
+      comentario: newSerie.comentario,
+      imagen: newSerie.imagen,
+      nota: newSerie.nota,
+    };
+    return await db.query(querys.addSerie, serie, "insert", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end()); //Si existe la conexión se cierra
+  }
+};
+
+//***************
+//PELICULAS******
+//***************
 let peliculasQueries = {};
 
-peliculasQueries.getPeliculas = async (id) =>{
+//GET de todas las peliculas
+peliculasQueries.getPeliculas = async (id) => {
   let conn = null;
-  try{
+  try {
     conn = await db.createConnection();
     //db.query recibe la sqlquery, los params, type, y la conexion
     return await db.query(querys.getPeliculas, id, "select", conn);
-  } catch(e){
+  } catch (e) {
     throw new Error(e);
+  }
+};
+
+//Añadir pelicula
+
+
+peliculasQueries.addPelicula = async (newPelicula) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    const pelicula = {
+      id: newPelicula.id,
+      nombre: newPelicula.nombre,
+      fecha: newPelicula.fecha,
+      comentario: newPelicula.comentario,
+      imagen: newPelicula.imagen,
+      nota: newPelicula.nota,
+    };
+    return await db.query(querys.addPelicula, pelicula, "insert", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end()); //Si existe la conexión se cierra
   }
 
 }
 
+//Exportamos todas las funciones (no olvidar desestructurar al importar)
 export default {
   animeQueries,
   videogamesQueries,

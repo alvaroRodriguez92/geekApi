@@ -1,13 +1,19 @@
+let querys = {};
 
-let querys = {}
+//Consultas Anime
+querys.getAnimes = "SELECT * FROM ANIME";
+querys.addAnime = "INSERT INTO ANIME SET ?";
 
-//Consultas
-querys.getAnimes = "SELECT * FROM ANIME"
+//Consultas Series
+querys.getSeries = "SELECT * FROM SERIES";
+querys.addSerie = "INSERT INTO SERIES SET ?";
 
-querys.getSeries = "SELECT * FROM SERIES"
+//Consultas Videojuegos
+querys.getVideogames = "SELECT * FROM VIDEOJUEGOS";
+querys.addVideojuego = "INSERT INTO VIDEOJUEGOS SET ?";
 
-querys.getVideogames = "SELECT * FROM VIDEOJUEGOS"
-
-querys.getPeliculas = "SELECT * FROM PELICULAS"
+//Consultas Peliculas
+querys.getPeliculas = "SELECT * FROM PELICULAS";
+querys.addPelicula = "INSERT INTO PELICULAS SET ?";
 
 export default querys;
