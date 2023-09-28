@@ -1,5 +1,6 @@
 import db from "./mysqlConn.mjs";
 import querys from "./querys.mjs";
+import utils from "../utils/utils.mjs";
 
 //***************
 //ANIMES*********
@@ -45,6 +46,43 @@ animeQueries.addAnime = async (newAnime) => {
   }
 };
 
+//Editar anime
+animeQueries.updateAnime = async (id, newData) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    let update = {
+      id: newData.id,
+      nombre: newData.nombre,
+      fecha: newData.fecha,
+      comentario: newData.comentario,
+      imagen: newData.imagen,
+      nota: newData.nota,
+    };
+
+    await utils.removeUndefinedKeys(update);
+
+    return await db.query(querys.updateAnime, [update, id], "update", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Borrar un anime
+animeQueries.deleteAnime = async (id) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.deleteAnime, id, "delete", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  } //si existe la conexion se cierra
+};
+
 //***************
 //VIDEOJUEGOS****
 //***************
@@ -82,6 +120,49 @@ videogamesQueries.addVideojuego = async (newVideojuego) => {
     throw new Error(e);
   } finally {
     conn && (await conn.end()); //Si existe la conexión se cierra
+  }
+};
+
+//Editar videojuego
+videogamesQueries.updateVideojuego = async (id, newData) => {
+  let conn = null;
+
+  try {
+    conn = await db.createConnection();
+    let update = {
+      id: newData.id,
+      nombre: newData.nombre,
+      fecha: newData.fecha,
+      comentario: newData.comentario,
+      imagen: newData.imagen,
+    };
+
+    await utils.removeUndefinedKeys(update);
+
+    return await db.query(
+      querys.updateVideojuego,
+      [update, id],
+      "update",
+      conn
+    );
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Eliminar videojuego
+
+videogamesQueries.deleteVideojuego = async (id) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.deleteVideojuego, id, "delete", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
   }
 };
 
@@ -126,6 +207,45 @@ seriesQueries.addSerie = async (newSerie) => {
   }
 };
 
+//Editar serie
+
+seriesQueries.updateSerie = async (id, newData) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    let update = {
+      id: newData.id,
+      nombre: newData.nombre,
+      fecha: newData.fecha,
+      comentario: newData.comentario,
+      comentario: newData.comentario,
+      imagen: newData.imagen,
+    };
+
+    await utils.removeUndefinedKeys(update);
+
+    return await db.query(querys.updateSerie, [update, id], "update", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Eliminar serie
+
+seriesQueries.deleteSerie = async (id) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.deleteSerie, id, "delete", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
 //***************
 //PELICULAS******
 //***************
@@ -144,8 +264,6 @@ peliculasQueries.getPeliculas = async (id) => {
 };
 
 //Añadir pelicula
-
-
 peliculasQueries.addPelicula = async (newPelicula) => {
   let conn = null;
   try {
@@ -164,8 +282,43 @@ peliculasQueries.addPelicula = async (newPelicula) => {
   } finally {
     conn && (await conn.end()); //Si existe la conexión se cierra
   }
+};
 
-}
+//Modificar pelicula
+peliculasQueries.updatePelicula = async (id, newData) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    let update = {
+      id: newData.id,
+      nombre: newData.nombre,
+      fecha: newData.fecha,
+      comentario: newData.comentario,
+      imagen: newData.imagen,
+    };
+
+    await utils.removeUndefinedKeys(update);
+
+    return await db.query(querys.updatePelicula, [update, id], "update", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Eliminar pelicula
+peliculasQueries.deletePelicula = async (id) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.deletePelicula, id, "delete", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end()); //Si existe la conexión se cierra
+  }
+};
 
 //Exportamos todas las funciones (no olvidar desestructurar al importar)
 export default {

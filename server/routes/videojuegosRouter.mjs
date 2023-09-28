@@ -5,5 +5,7 @@ const videojuegosRouter = express.Router()
 
 videojuegosRouter.get("/", videojuegosController.getVideojuegos)
 videojuegosRouter.post("/", videojuegosController.addVideojuego)
+videojuegosRouter.patch("/:id", videojuegosController.updateVideojuego)
+videojuegosRouter.delete("/:id", videojuegosController.deleteVideojuego)
 
 export default videojuegosRouter;

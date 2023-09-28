@@ -27,12 +27,53 @@ videojuegosController.addVideojuego = async (req, res) => {
       imagen: imagen,
       nota: nota,
     };
-    
+
     const data = await dao.addVideojuego(newVideojuego);
     if (!data) {
       res.status(400).send("Error al añadir videojuego");
     }
     res.status(200).send(newVideojuego);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+//Endpoint para modificar videojuego
+videojuegosController.updateVideojuego = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, fecha, comentario, imagen, nota } = req.body;
+
+    const updatedVideojuego = {
+      id: id,
+      nombre: nombre,
+      fecha: fecha,
+      comentario: comentario,
+      imagen: imagen,
+      nota: nota,
+    };
+    const data = await dao.updateVideojuego(id, updatedVideojuego);
+    if (!data) {
+      res.status(400).send("Error al modificar videojuego");
+    }
+    res.status(200).send("Videojuego modificado correctamente");
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+//Eliminar videojuego
+
+videojuegosController.deleteVideojuego = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      res.status(400).send("No se ha encontrado el id del videojuego");
+    }
+    const data = await dao.deleteVideojuego(id);
+    if (!data) {
+      res.status(400).send("Error al eliminar videojuego");
+    }
+    res.status(200).send("Videojuego eliminado correctamente");
   } catch (e) {
     throw new Error(e);
   }

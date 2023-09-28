@@ -42,4 +42,53 @@ animeController.addAnime = async (req, res) => {
   }
 };
 
+// Endpoint para modificar un anime
+
+animeController.updateAnime = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, fecha, comentario, imagen, nota } = req.body;
+
+    const updatedAnime = {
+      id: id,
+      nombre: nombre,
+      fecha: fecha,
+      comentario: comentario,
+      imagen: imagen,
+      nota: nota,
+    };
+    const data = await dao.updateAnime(id, updatedAnime);
+    
+    if (!data||!id) {
+      res.status(400).send("Error al modificar anime, faltan datos");
+    }
+
+    return res.status(200).send("Anime modificado correctamente");
+  } catch (e) {
+    throw new Error(e);
+  }
+
+}
+
+//Endpoint para eliminar anime
+
+animeController.deleteAnime = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if(!id){
+      res.status(400).send("Necesita pasar el id por param");
+    }
+    const data = await dao.deleteAnime(id);
+
+    if (!data) {
+      res.status(400).send("Error al eliminar anime");
+    }
+
+    res.status(200).send("Anime eliminado correctamente");
+  } catch (e) {
+    throw new Error(e);
+  }
+
+}
+
 export default animeController;

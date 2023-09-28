@@ -18,8 +18,9 @@ seriesController.getSeries = async (req, res) => {
 
 seriesController.addSerie = async (req, res) => {
     try{
-        const { nombre, fecha, comentario, imagen, nota } = req.body;
+        const { id,nombre, fecha, comentario, imagen, nota } = req.body;
         const newSerie = {
+            id:id,
             nombre: nombre,
             fecha: fecha,
             comentario: comentario,
@@ -38,6 +39,51 @@ seriesController.addSerie = async (req, res) => {
 
 }
 
+//Modificar serie
+seriesController.updateSerie = async (req, res) =>{
+    try{
+        const {id} = req.params;
+        const {nombre, fecha, comentario, imagen, nota} = req.body;
+        const updatedSerie = {
+            id:id,
+            nombre: nombre,
+            fecha: fecha,
+            comentario: comentario,
+            imagen:imagen,
+            nota: nota
+        }
+
+        const data = await dao.updateSerie(id,updatedSerie);
+        if(!data){
+            res.status(400).send("Error al modificar serie");
+        }
+
+        res.status(200).send("Serie modificada correctamente");
+    } catch (e) {
+        throw new Error(e);
+    }
+    
+}
+
+//Eliminar serie
+
+seriesController.deleteSerie = async (req, res) => {
+    try{
+        const { id } = req.params;
+        if (!id) {
+            res.status(400).send("No se ha encontrado el id de la serie")
+        }
+        const data = await dao.deleteSerie(id);
+        if (!data) {
+            res.status(400).send("Error al eliminar serie");
+        }
+        res.status(200).send("Serie eliminada correctamente");
+
+    } catch (e) {
+        throw new Error(e); 
+    }
+
+}
 
 
 export default seriesController;
