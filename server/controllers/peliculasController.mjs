@@ -85,4 +85,19 @@ peliculasController.deletePelicula = async (req, res) => {
   }
 };
 
+//Endpoint para obtener los años
+peliculasController.getYears = async (req, res) => {
+  try {
+
+    const data = await dao.getYearsPelicula();
+
+    if (!data) {
+      res.status(400).send("Error al recibir los años");
+    }
+    res.status(200).send(data);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 export default peliculasController;

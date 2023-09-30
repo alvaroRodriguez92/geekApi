@@ -1,13 +1,12 @@
 import { Button, Box } from "@mui/material";
 import {Link} from "react-router-dom"
+import { useCardContext } from "../../Context/cardContext";
 
 export default function Home() {
 
+  const temas: String[] = ["Series", "Anime","Peliculas", "Videojuegos"]
 
-  //Llamada fetch con ${anime vivdeojuego o lo k sea que se lo pasará el boton}
-  //fetch("blablabla/${videojuegos}")
-  //seteamos en un estado la info que estará en el context y la mostramos en el main
-  //el fetch también tiene que estar en el context
+  const {infoTema} = useCardContext()
 
   return (
     <main className="main-home">
@@ -23,7 +22,10 @@ export default function Home() {
         sx={{
           zIndex: "1",
         }}
-      ><Link to="/main">
+      >
+        {temas.map((tema:String)=>{
+          return(
+            <Link key={`${tema}`} to="/main">
         <Button
           sx={{
             color: "antiquewhite",
@@ -32,58 +34,19 @@ export default function Home() {
             height: "50px",
             mr: 32,
             mb: 4,
+            border:"2px solid black",
+            borderRadius:"5px"
           }}
           variant="contained"
+          onClick={()=>infoTema(tema)}
         >
-          Series
+          {tema}
         </Button>
         </Link>
-        <Link to="/main">
-        <Button
-          sx={{
-            color: "antiquewhite",
-            backgroundColor: "#ab5833",
-            width: "300px",
-            height: "50px",
-            mr: 32,
-            mb: 4,
-          }}
-          variant="contained"
-        >
-          Peliculas
-        </Button>
-        </Link>
-        <Link to="/main">
-        <Button
-          sx={{
-            color: "antiquewhite",
-            backgroundColor: "#ab5833",
-            width: "300px",
-            height: "50px",
-            mr: 32,
-            mb: 4,
-          }}
-          variant="contained"
-        >
-          Anime
-        </Button>
-        </Link>
-
-        <Link to="/main">
-        <Button
-          sx={{
-            color: "antiquewhite",
-            backgroundColor: "#ab5833",
-            width: "300px",
-            height: "50px",
-            mr: 32,
-            mb: 4,
-          }}
-          variant="contained"
-        >
-          Videojuegos
-        </Button>
-        </Link>
+          )
+        })}
+        
+        
 
       </Box>
 

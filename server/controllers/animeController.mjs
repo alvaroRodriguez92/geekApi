@@ -91,4 +91,19 @@ animeController.deleteAnime = async (req, res) => {
 
 }
 
+//Endpoint para obtener los años
+animeController.getYears = async (req, res) => {
+  try {
+
+    const data = await dao.getYearsAnime();
+
+    if (!data) {
+      res.status(400).send("Error al recibir los años");
+    }
+    res.status(200).send(data);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 export default animeController;

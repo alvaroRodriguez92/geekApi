@@ -79,4 +79,20 @@ videojuegosController.deleteVideojuego = async (req, res) => {
   }
 };
 
+//Endpoint para obtener los años
+videojuegosController.getYears = async (req, res) => {
+  try {
+
+    const data = await dao.getYearsVideojuego();
+
+    if (!data) {
+      res.status(400).send("Error al recibir los años");
+    }
+    res.status(200).send(data);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+
 export default videojuegosController;

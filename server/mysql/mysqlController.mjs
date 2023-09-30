@@ -83,6 +83,19 @@ animeQueries.deleteAnime = async (id) => {
   } //si existe la conexion se cierra
 };
 
+//Obtener años
+animeQueries.getYears = async()=>{
+  let conn = null;
+try{
+ conn = await db.createConnection();
+ return await db.query(querys.getYearsAnime,"","select",conn);
+} catch(e){
+  throw new Error(e);
+} finally{
+  conn && await conn.end();
+}
+}
+
 //***************
 //VIDEOJUEGOS****
 //***************
@@ -166,6 +179,19 @@ videogamesQueries.deleteVideojuego = async (id) => {
   }
 };
 
+//Obtener años
+videogamesQueries.getYears = async()=>{
+  let conn = null;
+try{
+ conn = await db.createConnection();
+ return await db.query(querys.getYearsVideojuego,"","select",conn);
+} catch(e){
+  throw new Error(e);
+} finally{
+  conn && await conn.end();
+}
+}
+
 //***************
 //SERIES*********
 //***************
@@ -246,6 +272,19 @@ seriesQueries.deleteSerie = async (id) => {
   }
 };
 
+//Obtener años
+seriesQueries.getYears = async()=>{
+  let conn = null;
+try{
+ conn = await db.createConnection();
+ return await db.query(querys.getYearsSerie,"","select",conn);
+} catch(e){
+  throw new Error(e);
+} finally{
+  conn && await conn.end();
+}
+}
+
 //***************
 //PELICULAS******
 //***************
@@ -319,6 +358,21 @@ peliculasQueries.deletePelicula = async (id) => {
     conn && (await conn.end()); //Si existe la conexión se cierra
   }
 };
+
+//Obtener años
+peliculasQueries.getYears = async()=>{
+  let conn = null;
+try{
+ conn = await db.createConnection();
+ return await db.query(querys.getYearsPelicula,"","select",conn);
+} catch(e){
+  throw new Error(e);
+} finally{
+  conn && await conn.end();
+}
+}
+
+
 
 //Exportamos todas las funciones (no olvidar desestructurar al importar)
 export default {

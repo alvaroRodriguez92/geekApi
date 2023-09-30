@@ -8,5 +8,6 @@ animeRouter.get("/", animeController.getAnimes);
 animeRouter.post("/", animeController.addAnime);
 animeRouter.patch("/:id", animeController.updateAnime);
 animeRouter.delete("/:id", animeController.deleteAnime);
+animeRouter.get("/years", animeController.getYears);
 
 export default animeRouter;

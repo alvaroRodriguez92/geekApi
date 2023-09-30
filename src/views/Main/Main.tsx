@@ -1,14 +1,19 @@
-import { OutlinedInput } from '@mui/material';
+import { OutlinedInput, Button } from "@mui/material";
+import CardPlegada from "../../components/Cards/CardPlegada";
+import { useCardContext } from "../../Context/cardContext";
 
+export default function Main() {
+  const { info } = useCardContext();
 
-export default function Main({series, peliculas, videojuegos, anime}) {
+  let years: String[] = [];
 
-    
+  
+  return (
+    <main className="main-main">
+      <h1>MI MAIN</h1>
+      <OutlinedInput placeholder="Busca aqui..." />
 
-    return (
-        <main className='main-main'>
-            <h1>MI MAIN</h1>
-            <OutlinedInput placeholder='Busca aqui...'/>
-        </main>
-    );
+      <CardPlegada info={info} />
+    </main>
+  );
 }
