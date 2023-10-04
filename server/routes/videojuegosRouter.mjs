@@ -4,10 +4,11 @@ import videojuegosController from "../controllers/videojuegosController.mjs"
 const videojuegosRouter = express.Router()
 
 videojuegosRouter.get("/", videojuegosController.getVideojuegos)
-videojuegosRouter.post("/", videojuegosController.addVideojuego)
-videojuegosRouter.patch("/:id", videojuegosController.updateVideojuego)
-videojuegosRouter.delete("/:id", videojuegosController.deleteVideojuego)
-videojuegosRouter.get("/years", videojuegosController.getYears);
+videojuegosRouter.get("/:year", videojuegosController.getVideojuegosByYear);
+videojuegosRouter.get("/year/years", videojuegosController.getYears);
+videojuegosRouter.post("/", videojuegosController.addVideojuego);
+videojuegosRouter.patch("/:id", videojuegosController.updateVideojuego);
+videojuegosRouter.delete("/:id", videojuegosController.deleteVideojuego);
 
 
 export default videojuegosRouter;

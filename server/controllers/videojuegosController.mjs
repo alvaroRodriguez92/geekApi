@@ -14,6 +14,21 @@ videojuegosController.getVideojuegos = async (req, res) => {
   }
 };
 
+//Endpoint para obtener videojuego según el año
+videojuegosController.getVideojuegosByYear  = async (req, res) => {
+  try {
+    const { year } = req.params;
+
+    const videojuegos = await dao.getVideojuegosByYear(year);
+
+    if (videojuegos.length > 0) {
+      res.status(200).send(videojuegos);
+    }
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 //Endpoint para añadir un videojuego
 videojuegosController.addVideojuego = async (req, res) => {
   try {
@@ -82,17 +97,18 @@ videojuegosController.deleteVideojuego = async (req, res) => {
 //Endpoint para obtener los años
 videojuegosController.getYears = async (req, res) => {
   try {
-
     const data = await dao.getYearsVideojuego();
 
     if (!data) {
       res.status(400).send("Error al recibir los años");
     }
-    res.status(200).send(data);
+    const years = data.map((year) => {
+      return year.años;
+    });
+    res.status(200).send(years);
   } catch (e) {
     throw new Error(e);
   }
 };
-
 
 export default videojuegosController;

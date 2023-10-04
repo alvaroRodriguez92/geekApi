@@ -1,6 +1,7 @@
 import db from "./mysqlConn.mjs";
 import querys from "./querys.mjs";
 import utils from "../utils/utils.mjs";
+import { Console } from "console";
 
 //***************
 //ANIMES*********
@@ -9,7 +10,6 @@ let animeQueries = {};
 
 //Query para obtener todos los animes
 animeQueries.getAnimes = async (id) => {
-  console.log("entrando");
   let conn = null;
   try {
     conn = await db.createConnection();
@@ -19,6 +19,23 @@ animeQueries.getAnimes = async (id) => {
     throw new Error(e);
   } finally {
     conn && (await conn.end()); //si existe la conexion se cierra
+  }
+};
+
+//Query para obtener anime según el año
+
+animeQueries.getAnimeByYear = async (year) => {
+  let conn = null;
+  try {
+    const año = `%${year}%`
+    conn = await db.createConnection();
+    //db.query recibe la sqlquery, los params, type y la conexion
+
+    return await db.query(querys.getAnimeByYear, año, "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
   }
 };
 
@@ -84,17 +101,18 @@ animeQueries.deleteAnime = async (id) => {
 };
 
 //Obtener años
-animeQueries.getYears = async()=>{
+animeQueries.getYears = async () => {
   let conn = null;
-try{
- conn = await db.createConnection();
- return await db.query(querys.getYearsAnime,"","select",conn);
-} catch(e){
-  throw new Error(e);
-} finally{
-  conn && await conn.end();
-}
-}
+  try {
+    conn = await db.createConnection();
+    console.log("llego aqui???")
+    return await db.query(querys.getYearsAnime, "", "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
 
 //***************
 //VIDEOJUEGOS****
@@ -112,6 +130,22 @@ videogamesQueries.getVideojuegos = async (id) => {
     throw new Error(e);
   } finally {
     conn && (await conn.end()); //si existe la conexion se cierra
+  }
+};
+
+//Query para obtener videojuegos según el año
+
+videogamesQueries.getVideojuegosByYear = async (year) => {
+  let conn = null;
+  try {
+    const año = `%${year}%`
+    conn = await db.createConnection();
+    //db.query recibe la sqlquery, los params, type y la conexion
+    return await db.query(querys.getVideojuegosByYear, año, "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
   }
 };
 
@@ -180,17 +214,17 @@ videogamesQueries.deleteVideojuego = async (id) => {
 };
 
 //Obtener años
-videogamesQueries.getYears = async()=>{
+videogamesQueries.getYears = async () => {
   let conn = null;
-try{
- conn = await db.createConnection();
- return await db.query(querys.getYearsVideojuego,"","select",conn);
-} catch(e){
-  throw new Error(e);
-} finally{
-  conn && await conn.end();
-}
-}
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.getYearsVideojuego, "", "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
 
 //***************
 //SERIES*********
@@ -208,6 +242,22 @@ seriesQueries.getSeries = async (id) => {
     throw new Error(e);
   } finally {
     conn && (await conn.end()); //si existe la conexion se cierra
+  }
+};
+
+//Query para obtener series según el año
+
+seriesQueries.getSeriesByYear = async (year) => {
+  let conn = null;
+  try {
+    const año = `%${year}%`
+    conn = await db.createConnection();
+    //db.query recibe la sqlquery, los params, type y la conexion
+    return await db.query(querys.getSeriesByYear, año, "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
   }
 };
 
@@ -273,17 +323,17 @@ seriesQueries.deleteSerie = async (id) => {
 };
 
 //Obtener años
-seriesQueries.getYears = async()=>{
+seriesQueries.getYears = async () => {
   let conn = null;
-try{
- conn = await db.createConnection();
- return await db.query(querys.getYearsSerie,"","select",conn);
-} catch(e){
-  throw new Error(e);
-} finally{
-  conn && await conn.end();
-}
-}
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.getYearsSerie, "", "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
 
 //***************
 //PELICULAS******
@@ -299,6 +349,22 @@ peliculasQueries.getPeliculas = async (id) => {
     return await db.query(querys.getPeliculas, id, "select", conn);
   } catch (e) {
     throw new Error(e);
+  }
+};
+
+//Query para obtener peliculas según el año
+
+peliculasQueries.getPeliculasByYear = async (year) => {
+  let conn = null;
+  try {
+    const año = `%${year}%`
+    conn = await db.createConnection();
+    //db.query recibe la sqlquery, los params, type y la conexion
+    return await db.query(querys.getPeliculasByYear, año, "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
   }
 };
 
@@ -360,19 +426,17 @@ peliculasQueries.deletePelicula = async (id) => {
 };
 
 //Obtener años
-peliculasQueries.getYears = async()=>{
+peliculasQueries.getYears = async () => {
   let conn = null;
-try{
- conn = await db.createConnection();
- return await db.query(querys.getYearsPelicula,"","select",conn);
-} catch(e){
-  throw new Error(e);
-} finally{
-  conn && await conn.end();
-}
-}
-
-
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.getYearsPelicula, "", "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
 
 //Exportamos todas las funciones (no olvidar desestructurar al importar)
 export default {

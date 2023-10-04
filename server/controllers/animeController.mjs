@@ -16,6 +16,21 @@ animeController.getAnimes = async (req, res) => {
   }
 };
 
+//Endpoint para obtener anime según el año
+animeController.getAnimeByYear = async (req, res) => {
+  try {
+    const { year } = req.params;
+
+    const animes = await dao.getAnimesByYear(year);
+
+    if (animes.length > 0) {
+      res.status(200).send(animes);
+    }
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 //Endpoint para añadir anime
 animeController.addAnime = async (req, res) => {
   try {
@@ -36,7 +51,7 @@ animeController.addAnime = async (req, res) => {
       res.status(400).send("Error al añadir anime");
     }
 
-     res.status(200).send(newAnime);
+    res.status(200).send(newAnime);
   } catch (e) {
     throw new Error(e);
   }
@@ -58,8 +73,8 @@ animeController.updateAnime = async (req, res) => {
       nota: nota,
     };
     const data = await dao.updateAnime(id, updatedAnime);
-    
-    if (!data||!id) {
+
+    if (!data || !id) {
       res.status(400).send("Error al modificar anime, faltan datos");
     }
 
@@ -67,15 +82,14 @@ animeController.updateAnime = async (req, res) => {
   } catch (e) {
     throw new Error(e);
   }
-
-}
+};
 
 //Endpoint para eliminar anime
 
 animeController.deleteAnime = async (req, res) => {
   try {
     const { id } = req.params;
-    if(!id){
+    if (!id) {
       res.status(400).send("Necesita pasar el id por param");
     }
     const data = await dao.deleteAnime(id);
@@ -88,19 +102,23 @@ animeController.deleteAnime = async (req, res) => {
   } catch (e) {
     throw new Error(e);
   }
-
-}
+};
 
 //Endpoint para obtener los años
 animeController.getYears = async (req, res) => {
   try {
-
+    console.log("holla??")
     const data = await dao.getYearsAnime();
 
     if (!data) {
       res.status(400).send("Error al recibir los años");
     }
-    res.status(200).send(data);
+    console.log(data,"DATA????")
+    const years =  data.map((year) => {
+      return year.años;
+    });
+    console.log(years,"years??????")
+    res.status(200).send(years);
   } catch (e) {
     throw new Error(e);
   }

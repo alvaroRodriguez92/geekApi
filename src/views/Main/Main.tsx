@@ -1,19 +1,32 @@
-import { OutlinedInput, Button } from "@mui/material";
+import {useEffect} from "react";
+import { OutlinedInput, Button,Grid,Box } from "@mui/material";
 import CardPlegada from "../../components/Cards/CardPlegada";
 import { useCardContext } from "../../Context/cardContext";
 
 export default function Main() {
-  const { info } = useCardContext();
+  const { info,años,tema,infoTema } = useCardContext();
 
-  let years: String[] = [];
+  console.log(info,"INFOOOO")
 
+  useEffect(()=>{
+    infoTema(tema,años[años.length-1])
+    console.log("me ejecuto el useeffect")
+  },[tema])
   
   return (
     <main className="main-main">
-      <h1>MI MAIN</h1>
+      <h1>{tema}</h1>
       <OutlinedInput placeholder="Busca aqui..." />
-
-      <CardPlegada info={info} />
+      <Grid container sx={{display:"flex",flexDirection:"row", justifyContent:"center",p:5}}>
+      {años?.map((año)=>{
+        return(
+          <Grid item xs={1}>
+          <Button  sx={{backgroundColor:"#000000"}} variant="contained" onClick={()=>infoTema(tema,año)}>{año}</Button>
+          </Grid>
+        )
+      })}
+      </Grid>
+      {info?(<CardPlegada info={info} />):("")}
     </main>
   );
 }

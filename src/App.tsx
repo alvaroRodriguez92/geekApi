@@ -5,7 +5,7 @@ import {theme} from './styles/theme'
 import CardContextProvider from "./Context/cardContext"
 import { Route,Routes, BrowserRouter } from 'react-router-dom';
 
-function App() {
+function App():JSX.Element {
   return (
     <BrowserRouter>
     <ThemeProvider theme={theme}>

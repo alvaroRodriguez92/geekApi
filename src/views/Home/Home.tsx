@@ -1,3 +1,4 @@
+import {useEffect} from "react"
 import { Button, Box } from "@mui/material";
 import {Link} from "react-router-dom"
 import { useCardContext } from "../../Context/cardContext";
@@ -6,7 +7,12 @@ export default function Home() {
 
   const temas: String[] = ["Series", "Anime","Peliculas", "Videojuegos"]
 
-  const {infoTema} = useCardContext()
+  const {infoTema, infoAños,años} = useCardContext()
+
+  // useEffect(()=>{
+  //   infoAños("series")
+  //   console.log(años, "me ejecuto")
+  // },[])
 
   return (
     <main className="main-home">
@@ -24,6 +30,7 @@ export default function Home() {
         }}
       >
         {temas.map((tema:String)=>{
+          
           return(
             <Link key={`${tema}`} to="/main">
         <Button
@@ -38,7 +45,7 @@ export default function Home() {
             borderRadius:"5px"
           }}
           variant="contained"
-          onClick={()=>infoTema(tema)}
+          onClick={()=>infoAños(tema)}
         >
           {tema}
         </Button>

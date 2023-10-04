@@ -19,7 +19,6 @@ db.createConnection = async () => {
           reject(err);
         }
         resolve(mysqlConnection);
-        console.log("conexion a mysql exitosa");
       });
     } catch (err) {
       reject(err);
@@ -27,12 +26,13 @@ db.createConnection = async () => {
   });
 };
 
-db.query = async (sqlQuery, params, type, conn) => {
-  return new Promise((resolve, reject) => {
+db.query =  async (sqlQuery, params, type, conn) => {
+  return  new Promise((resolve, reject) => {
     try {
       conn.query(sqlQuery, params, async (err, result) => {
+        // console.log(sqlQuery, params,"VAMO A VE")
         if (!err) {
-          switch (type) {
+           switch (type) {
             case "select":
               resolve(JSON.parse(JSON.stringify(result)));
               break;

@@ -14,6 +14,21 @@ peliculasController.getPeliculas = async (req, res) => {
   }
 };
 
+//Endpoint para obtener peliculas según el año
+peliculasController.getPeliculasByYear  = async (req, res) => {
+  try {
+    const { year } = req.params;
+
+    const peliculas = await dao.getPeliculasByYear(year);
+
+    if (peliculas.length > 0) {
+      res.status(200).send(peliculas);
+    }
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 //Añadir pelicula
 
 peliculasController.addPelicula = async (req, res) => {
@@ -88,13 +103,15 @@ peliculasController.deletePelicula = async (req, res) => {
 //Endpoint para obtener los años
 peliculasController.getYears = async (req, res) => {
   try {
-
     const data = await dao.getYearsPelicula();
 
     if (!data) {
       res.status(400).send("Error al recibir los años");
     }
-    res.status(200).send(data);
+    const years = data.map((year) => {
+      return year.años;
+    });
+    res.status(200).send(years);
   } catch (e) {
     throw new Error(e);
   }
