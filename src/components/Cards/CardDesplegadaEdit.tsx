@@ -1,17 +1,14 @@
-import { Grid, Typography, } from "@mui/material";
+import { Grid, Typography, TextField } from "@mui/material";
 import { DesplieguePropsEdit } from "../../types";
 import Moment from "react-moment";
 import { motion } from "framer-motion";
-import ToogleButton from "./ToogleButton";
+import ToogleButtonEdit from "./ToogleButtonEdit";
 
-export default function CardDesplegada({
+export default function CardDesplegadaEdit({
   item,
-  desplegar,
-  despliegue,
   edit,
-  isEditing
+  isEditing,
 }: DesplieguePropsEdit) {
-
   function elegirColor(nota: string | undefined) {
     if (nota !== undefined) {
       const notaDecimal = Number.parseFloat(nota);
@@ -43,6 +40,7 @@ export default function CardDesplegada({
           justifyContent: "center",
           width: "560px",
           height: "328px",
+          // backgroundColor: "#3c3a37",
           background:
             "linear-gradient(138deg, rgba(129,126,121,1) 0%, rgba(60,58,55,1) 35%, rgba(24,23,21,1) 100%)",
           color: "#efefef",
@@ -59,17 +57,18 @@ export default function CardDesplegada({
             height: "100%",
             alignItems: "center",
           }}
-          onClick={() => desplegar(despliegue, item.id)}
         >
-          <Grid item xs={12} sx={{ width: "100%", maxHeight: "80px", userSelect:"none" }}>
-            <motion.h2
-              initial={{ opacity: 0, scale: 0.5 }}
-              transition={{ duration: 1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              layout="size"
-            >
-              {item.nombre}
-            </motion.h2>
+          <Grid
+            item
+            xs={12}
+            sx={{ width: "100%", maxHeight: "80px", userSelect: "none" }}
+          >
+            <TextField
+              id="filled-basic"
+              variant="standard"
+              placeholder={item.nombre}
+              sx={{ input: { color: "white" } }}
+            />{" "}
           </Grid>
           <Grid item xs={12}>
             {item.imagen ? (
@@ -94,39 +93,30 @@ export default function CardDesplegada({
             xs={12}
             sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
           >
-
-            <ToogleButton isEditing={isEditing} item={item} edit={edit} />
+            <ToogleButtonEdit isEditing={isEditing} item={item} edit={edit} />
           </Grid>
-
           <Grid
-            onClick={() => desplegar(despliegue, item.id)}
             item
             xs={12}
             sx={{
               width: "100%",
               display: "flex",
-              pt: 8,
+              pt: 6,
               pl: 3,
-              pb: 4,
+              pb: 2,
               textAlign: "start",
-              userSelect:"none"
             }}
           >
-            <motion.span
-              initial={{ opacity: 0, scale: 0.5 }}
-              transition={{ duration: 1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              layout="position"
-            >
-              {item.comentario}
-            </motion.span>
+            <TextField
+              id="filled-basic"
+              variant="standard"
+              multiline
+              rows={3}
+              placeholder={item.comentario}
+              inputProps={{ style: { color: "white" } }}
+            />{" "}
           </Grid>
-          <Grid
-            item
-            xs={12}
-            sx={{ pt: 1 }}
-            onClick={() => desplegar(despliegue, item.id)}
-          >
+          <Grid item xs={12} sx={{ pt: 1 }}>
             <motion.div
               animate={{
                 scale: [1, 1.3, 1.3, 1, 1],
@@ -136,7 +126,7 @@ export default function CardDesplegada({
               }}
             >
               <Typography
-                sx={{ p: 3, userSelect:"none" }}
+                sx={{ p: 3, userSelect: "none" }}
                 variant="overline"
                 fontSize={"24px"}
                 border={"4px solid" + elegirColor(item.nota)}
@@ -148,14 +138,14 @@ export default function CardDesplegada({
             </motion.div>
           </Grid>
           <Grid
-            onClick={() => desplegar(despliegue, item.id)}
             item
             xs={12}
             sx={{
               display: "flex",
               justifyContent: "flex-end",
               alignItems: "flex-end",
-            userSelect:"none"}}
+              userSelect: "none",
+            }}
           >
             <Moment date={item.fecha} format="DD/MM/YYYY" />
           </Grid>

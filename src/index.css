@@ -1,5 +1,6 @@
 body{
   margin:0;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
 }
 
 .main-home{
@@ -41,3 +42,39 @@ body{
   min-height:100vh;
   height: 100%;
 }
+
+.imagen-card{
+  height:auto;
+  max-width: 100%;
+  height:200px;
+}
+
+.tamaño-h6{
+  font-size: 14px;
+  font-weight: 200;
+  margin:8px;
+}
+
+.switch{
+  width:56px;
+  height:16px;
+  background-color:rgba(255,255,255,0.4);
+  display:flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 50px;
+  padding:10px;
+  cursor:pointer;
+}
+
+.switch[data-isOn="true"]{
+  justify-content: flex-end;
+}
+
+.handle{
+  width:30px;
+  height:30px;
+  background-color:white;
+  border-radius: 40px;
+}
+

@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import { OutlinedInput, Button,Grid,Box } from "@mui/material";
-import CardPlegada from "../../components/Cards/CardPlegada";
+import Card from "../../components/Cards/Card";
 import { useCardContext } from "../../Context/cardContext";
 
 export default function Main() {
@@ -26,7 +26,7 @@ export default function Main() {
         )
       })}
       </Grid>
-      {info?(<CardPlegada info={info} />):("")}
+      {info?(<Card info={info} />):("")}
     </main>
   );
 }
