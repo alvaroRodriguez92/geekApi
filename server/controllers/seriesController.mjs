@@ -1,4 +1,5 @@
 import dao from "../mysql/dao.mjs";
+import moment from "moment";
 
 const seriesController = {};
 
@@ -33,15 +34,18 @@ seriesController.getSeriesByYear  = async (req, res) => {
 
 seriesController.addSerie = async (req, res) => {
   try {
+    console.log(req.body,"BODYY");
+
     const { id, nombre, fecha, comentario, imagen, nota } = req.body;
     const newSerie = {
       id: id,
       nombre: nombre,
-      fecha: fecha,
+      fecha: moment().format(),
       comentario: comentario,
       imagen: imagen,
       nota: nota,
     };
+    console.log(newSerie, "NUEVVA SERIEE")
     const data = await dao.addSerie(newSerie);
     if (!data) {
       res.status(400).send("Error al añadir serie");

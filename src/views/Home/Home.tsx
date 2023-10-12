@@ -7,7 +7,7 @@ export default function Home() {
 
   const temas: String[] = ["Series", "Anime","Peliculas", "Videojuegos"]
 
-  const {infoTema, infoAños,años} = useCardContext()
+  const {infoAños} = useCardContext()
 
   // useEffect(()=>{
   //   infoAños("series")

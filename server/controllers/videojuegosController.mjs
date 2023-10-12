@@ -1,4 +1,5 @@
 import dao from "../mysql/dao.mjs";
+import moment from "moment";
 
 const videojuegosController = {};
 
@@ -37,7 +38,7 @@ videojuegosController.addVideojuego = async (req, res) => {
     const newVideojuego = {
       id: id,
       nombre: nombre,
-      fecha: fecha,
+      fecha: moment().format(),
       comentario: comentario,
       imagen: imagen,
       nota: nota,

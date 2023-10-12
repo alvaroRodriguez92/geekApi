@@ -1,4 +1,5 @@
 import dao from "../mysql/dao.mjs";
+import moment from "moment";
 
 const animeController = {};
 
@@ -39,7 +40,7 @@ animeController.addAnime = async (req, res) => {
     const newAnime = {
       id: id,
       nombre: nombre,
-      fecha: fecha,
+      fecha: moment().format(),
       comentario: comentario,
       imagen: imagen,
       nota: nota,
