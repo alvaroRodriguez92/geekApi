@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type Info } from "../../types";
+import { CardInterface,type Info } from "../../types";
 import { Grid, Button } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import CardPlegada from "./CardPlegada";
@@ -23,21 +23,29 @@ export default function Card({ info }: { info: Info }) {
     setDespliegue(aux);
   }
 
-  function edit(array: boolean[], id: number) {
-    console.log(id, "ID");
+  function onSubmit(values:CardInterface|undefined){
+    console.log("valuess",values)
+  }
+
+  function edit(array:boolean[], id:number, values?:CardInterface) {
     const aux = [...array];
     if (!aux[id] || aux[id] == false) {
-      console.log("entro??");
       aux[id] = true;
     } else {
       aux[id] = false;
+      onSubmit(values);
     }
     setIsEditing(aux);
     console.log(isEditing);
   }
 
   function add (){
-    setIsAdding(true)
+    if(isAdding==false){
+      setIsAdding(true)
+
+    } else{
+      setIsAdding(false)
+    }
   }
 
   return (
@@ -55,7 +63,7 @@ export default function Card({ info }: { info: Info }) {
             alignItems: "flex-start",
             justifyContent: "flex-end",
           pb:2}}
-        ><CardNueva/></Grid>):(<Grid
+        ><CardNueva add={add}/></Grid>):(<Grid
           item
           sx={{
             display: "flex",

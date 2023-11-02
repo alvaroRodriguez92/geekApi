@@ -8,18 +8,20 @@ import dotenv from "dotenv"
 import multer from "multer"
 import cookieParser from "cookie-parser"
 import path from "path"
+import { fileURLToPath } from 'url';
 import cors from "cors"
 import expressFileUpload from "express-fileupload"
-
-
-
-
 
 dotenv.config()
 
 const PORT = process.env.PORT || 3000
 
 const app = express()
+
+//__dirname no existe en ES Module, así que tenemos que replicarlo definiendo lo siguiente (tras importar path y fileURLToPath)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 //Middlewares 
 // app.use(logger("dev")) //para que muestre las peticiones en consola
@@ -32,7 +34,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
+
 app.use(express.static(path.join(__dirname, "public")));
+
+//ExpressFileUpload lee el formdata/multipart
 app.use(
   expressFileUpload({
     createParentPath: true,

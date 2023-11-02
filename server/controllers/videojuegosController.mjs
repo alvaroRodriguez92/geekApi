@@ -1,5 +1,10 @@
 import dao from "../mysql/dao.mjs";
 import moment from "moment";
+import path from "path"
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const videojuegosController = {};
 
@@ -33,14 +38,24 @@ videojuegosController.getVideojuegosByYear  = async (req, res) => {
 //Endpoint para añadir un videojuego
 videojuegosController.addVideojuego = async (req, res) => {
   try {
-    const { id, nombre, fecha, comentario, imagen, nota } = req.body;
+    const { id, nombre, comentario, nota } = req.body;
+    let nombreImagen ="";
+
+    if(req.files){
+      const {imagen} = req.files;
+      nombreImagen = imagen.name;
+      let uploadPath = path.join(__dirname, "../public/uploadImages/"+imagen.name)
+      await imagen.mv(uploadPath, err=>{
+        if(err) return res.status(500).send(err)
+      })
+    }
 
     const newVideojuego = {
       id: id,
       nombre: nombre,
       fecha: moment().format(),
       comentario: comentario,
-      imagen: imagen,
+      imagen: nombreImagen,
       nota: nota,
     };
 

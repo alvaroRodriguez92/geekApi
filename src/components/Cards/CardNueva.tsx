@@ -1,42 +1,43 @@
 import {useState} from "react"
-import { useCardContext } from "../../context/CardContext";
 import { Grid, Button, TextField } from "@mui/material";
+import { useCardContext } from "../../Context/cardContext";
 import { motion } from "framer-motion";
 import { Formik, Form } from "formik";
 import { MuiFileInput } from "mui-file-input";
 import { cardSchema } from "./cardSchema";
-import { type Card } from "../../types";
+import { Add, type CardInterface } from "../../types";
 
-export default function CardNueva() {
-  const [imagen, setImagen] = useState<File|null>()
+
+export default function CardNueva({add}:Add) {
+  const [imagen, setImagen] = useState<File|null|undefined>()
   const {tema} = useCardContext()
 
 
-  async function onSubmit(values: Card) {
+  async function onSubmit(values: CardInterface) {
+    console.log(imagen)
     const formData = new FormData();
     formData.append("nombre", values.nombre)
     formData.append("comentario", JSON.stringify(values.comentario))
     formData.append("nota", JSON.stringify(values.nota))
-    formData.append("imagen", JSON.stringify(imagen))
-    console.log(formData)
-    console.log(values)
-    for (var key of formData.entries()) {
-			console.log(key[0] + ', ' + key[1])
-		}
+    if(imagen){
+      formData.append("imagen", imagen)
+
+    }
+   
     const response = await fetch(`http://localhost:3000/${tema}/`, {
     method:"POST",
     body: formData
     });
     if(response.status==200){
-      console.log("como estan los maquinas lo primero de to")
+      add()
     }
   }
 
-  function handleChangeImagen(value:File|null){
+  function handleChangeImagen(value:File|null|undefined){
     setImagen(value)
   }
 
-  const initialValues: Card = {
+  const initialValues: CardInterface = {
     nombre: "",
     comentario: "",
     nota: 0,
@@ -115,7 +116,7 @@ export default function CardNueva() {
                   src={"../../src/assets/default.jpg"}
                   alt="imagen"
                 /> */}
-                  <MuiFileInput sx={{mt:12, ml:3}} label="Imagen" value={imagen} onChange={handleChangeImagen} />
+                  <MuiFileInput id="imagen" sx={{mt:12, ml:3}} label="Imagen" value={imagen} onChange={handleChangeImagen} />
                 </Grid>
               </Grid>
 
@@ -136,7 +137,9 @@ export default function CardNueva() {
                     display: "flex",
                     justifyContent: "flex-end",
                   }}
-                >
+                ><Button color="secondary"
+                variant="contained"
+                size="small" onClick={add} sx={{mr:2}}>Cancelar</Button>
                   <Button
                     color="secondary"
                     variant="contained"

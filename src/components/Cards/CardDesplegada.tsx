@@ -11,10 +11,10 @@ export default function CardDesplegada({
   edit,
   isEditing
 }: DesplieguePropsEdit) {
-
-  function elegirColor(nota: string | undefined) {
+  
+  function elegirColor(nota: number | undefined) {
     if (nota !== undefined) {
-      const notaDecimal = Number.parseFloat(nota);
+      const notaDecimal = nota;
       if (notaDecimal < 6) {
         return "#b53f3f";
       } else if (notaDecimal < 8 && notaDecimal >= 6) {
@@ -75,7 +75,7 @@ export default function CardDesplegada({
             {item.imagen ? (
               <img
                 className="imagen-card"
-                src={"../../src/assets/from.jpg"}
+                src={`http://localhost:3000/uploadImages/${item.imagen}`}
                 alt="imagen"
               />
             ) : (

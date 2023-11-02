@@ -1,19 +1,14 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ToogleProps } from "../../types";
 import DoneIcon from '@mui/icons-material/Done';
-import Done from "@mui/icons-material/Done";
 
-export default function ToogleButtonEdit({ isEditing, edit, item }: ToogleProps) {
-  const spring = {
-    type: "spring",
-    stiffness: 700,
-    damping: 30,
-  };
+export default function ToogleButtonEdit({ isEditing, edit, item,values }: ToogleProps) {
+  
   return (
     <div
       className="switch"
       data-isOn={isEditing[item.id]}
-      onClick={() => edit(isEditing, item.id)}
+      onClick={() => edit(isEditing, item.id, values)}
     >
       {" "}
       <AnimatePresence>

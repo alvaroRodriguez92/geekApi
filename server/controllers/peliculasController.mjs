@@ -1,11 +1,17 @@
 import dao from "../mysql/dao.mjs";
 import moment from "moment";
+import path from "path"
+import { fileURLToPath } from 'url';
 
+//__dirname no existe en ES Module, así que tenemos que replicarlo definiendo lo siguiente (tras importar path y fileURLToPath)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const peliculasController = {};
 
 peliculasController.getPeliculas = async (req, res) => {
-  //Logica y enlazamos con mysql a travles del DAO
+
+  //Logica y enlazamos con mysql a traves del DAO
   try {
     const peliculas = await dao.getPeliculas();
     if (peliculas.length > 0) {
@@ -35,15 +41,26 @@ peliculasController.getPeliculasByYear  = async (req, res) => {
 
 peliculasController.addPelicula = async (req, res) => {
   try {
-    const { id, nombre, fecha, comentario, imagen, nota } = req.body;
+    const { id, nombre, comentario, nota } = req.body;
+    let nombreImagen = "";
+    if(req.files){
+      const {imagen} = req.files;
+      nombreImagen = imagen.name;
+      let uploadPath = path.join(__dirname, "../public/uploadImages/"+imagen.name)
+      await imagen.mv(uploadPath, err=>{
+        if(err) return res.status(500).send(err)
+      })
+    }
+
     const newPelicula = {
       id: id,
       nombre: nombre,
       fecha: moment().format(),
       comentario: comentario,
-      imagen: imagen,
+      imagen: nombreImagen,
       nota: nota,
     };
+    
     const data = await dao.addPelicula(newPelicula);
     if (!data) {
       res.status(400).send("Error al añadir pelicula");

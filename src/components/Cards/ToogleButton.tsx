@@ -3,11 +3,7 @@ import { ToogleProps } from "../../types";
 import EditIcon from '@mui/icons-material/Edit';
 
 export default function ToogleButton({ isEditing, edit, item }: ToogleProps) {
-  const spring = {
-    type: "spring",
-    stiffness: 700,
-    damping: 30,
-  };
+ 
   return (
     <div
       className="switch"
