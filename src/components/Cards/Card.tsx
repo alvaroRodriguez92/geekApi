@@ -6,9 +6,12 @@ import CardPlegada from "./CardPlegada";
 import CardDesplegada from "./CardDesplegada";
 import CardDesplegadaEdit from "./CardDesplegadaEdit";
 import CardNueva from "./CardNueva";
+import Pendientes from "../Pendientes/Pendientes"
 import { motion } from "framer-motion";
+import { useCardContext } from "../../Context/cardContext";
 
 export default function Card({ info }: { info: Info }) {
+  const {tema,infoTema,año} = useCardContext()
   const [despliegue, setDespliegue] = useState([false]);
   const [isEditing, setIsEditing] = useState([false]);
   const [isAdding, setIsAdding] = useState(false);
@@ -23,17 +26,42 @@ export default function Card({ info }: { info: Info }) {
     setDespliegue(aux);
   }
 
-  function onSubmit(values:CardInterface|undefined){
-    console.log("valuess",values)
+  //Onsubmit del edit
+  async function onSubmit(values:CardInterface|undefined,id:number,imagen?:File|null|undefined){
+    const formData = new FormData();
+    let nota ="";
+    
+    if(values){
+      console.log(values)
+      formData.append("nombre", values.nombre);;
+      if(values.comentario) formData.append("comentario", values.comentario);
+      if(values.nota) {
+        nota= values.nota.toString()
+        formData.append("nota", nota)
+    }
+    }
+    if(imagen) formData.append("imagen", imagen)
+
+    
+   
+    const response = await fetch(`http://localhost:3000/${tema}/${id}`, {
+    method:"PATCH",
+    body: formData
+    });
+    if(response.ok){
+      // const data = await response.json()
+      // console.log(data)
+      infoTema(tema,año)
+    }
   }
 
-  function edit(array:boolean[], id:number, values?:CardInterface) {
+  function edit(array:boolean[], id:number, values?:CardInterface, imagen?:File|null|undefined) {
     const aux = [...array];
     if (!aux[id] || aux[id] == false) {
       aux[id] = true;
     } else {
       aux[id] = false;
-      onSubmit(values);
+      onSubmit(values, id,imagen);
     }
     setIsEditing(aux);
     console.log(isEditing);
@@ -51,7 +79,7 @@ export default function Card({ info }: { info: Info }) {
   return (
     <Grid
       container
-      sx={{ display: "flex", flexDirection: "row", p: 10, pl: 20 }}
+      sx={{ display: "flex", flexDirection: "row", p: "0 80px 80px 80px", pl: 20 }}
     >
       <Grid item xs={4}>
         
@@ -127,10 +155,10 @@ export default function Card({ info }: { info: Info }) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "start",
         }}
       >
-        <h1>Aqui ira pendientes</h1>
+        <Pendientes/>
       </Grid>
     </Grid>
   );

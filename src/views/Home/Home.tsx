@@ -5,7 +5,7 @@ import { useCardContext } from "../../Context/cardContext";
 
 export default function Home() {
 
-  const temas: String[] = ["Series", "Anime","Peliculas", "Videojuegos"]
+  const temas: string[] = ["series", "anime","peliculas", "videojuegos"]
 
   const {infoAños} = useCardContext()
 
@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <main className="main-home">
-      <h1>Bievenido a la Geek Api</h1>
+      <h1>Bienvenido a la Geek Api</h1>
       
       <Box
         width="100%"
@@ -29,7 +29,7 @@ export default function Home() {
           zIndex: "1",
         }}
       >
-        {temas.map((tema:String)=>{
+        {temas.map((tema:string)=>{
           
           return(
             <Link key={`${tema}`} to="/main">

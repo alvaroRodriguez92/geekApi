@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useCardContext } from "../../Context/cardContext";
 import { Grid, TextField, Button, Box } from "@mui/material";
 import { DesplieguePropsEdit } from "../../types";
 import { Formik, Form } from "formik";
@@ -9,25 +10,52 @@ import { type CardInterface } from "../../types";
 import { cardSchema } from "./cardSchema";
 import EditIcon from "@mui/icons-material/Edit";
 import { MuiFileInput } from "mui-file-input";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
 
 export default function CardDesplegadaEdit({
   item,
   edit,
   isEditing,
 }: DesplieguePropsEdit) {
-  const [logo, setLogo] = useState<any>(null);
-  // function elegirColor(nota: number | undefined) {
-  //   if (nota !== undefined) {
-  //     const notaDecimal = nota;
-  //     if (notaDecimal < 6) {
-  //       return "#b53f3f";
-  //     } else if (notaDecimal < 8 && notaDecimal >= 6) {
-  //       return "#dddd5a";
-  //     } else if (notaDecimal >= 8) {
-  //       return "#62ad62";
-  //     }
-  //   }
-  // }
+  const { tema, infoTema, año } = useCardContext();
+  const [imagen, setImagen] = useState<File | null | undefined>();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  function handleChangeImagen(value: File | null | undefined) {
+    setImagen(value);
+  }
+
+  async function eliminarImagen() {
+    const response = await fetch(
+      `http://localhost:3000/${tema}/image/${item.id}`,
+      {
+        method: "PATCH",
+      }
+    );
+    if (response.ok) {
+      infoTema(tema, año);
+    }
+  }
+
+  async function eliminarCard() {
+    const response = await fetch(`http://localhost:3000/${tema}/${item.id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      infoTema(tema, año);
+      handleClose()
+    }
+  }
 
   const initialValues: CardInterface = {
     nombre: item.nombre,
@@ -75,7 +103,7 @@ export default function CardDesplegadaEdit({
                   display: "flex",
                   flexDirection: "column",
                   height: "100%",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                 }}
               >
                 <Grid
@@ -119,30 +147,35 @@ export default function CardDesplegadaEdit({
                             fontSize: "15px",
                             mr: 1,
                           }}
+                          onClick={eliminarImagen}
                         >
                           X
                         </Button>
-                        <Button variant="contained">
-                          {/* <Button
-                        variant="contained"
-                        sx={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          backgroundColor: "blue",
-                          height: "24px",
-                          minWidth: "24px",
-                        }}
-                      > */}
+                        <Button
+                          variant="contained"
+                          onClick={() =>
+                            document.querySelector(".css-1fel157")!.click()
+                          }
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            backgroundColor: "blue",
+                            maxHeight: "24px",
+                            maxWidth: "52px",
+                            minWidth: "52px",
+                          }}
+                        >
                           <MuiFileInput
-                            // sx={{display:"none"}}
+                            hideSizeText
+                            aria-hidden
                             hidden
-                            id="IMAGEN"
-                            name="IMAGEN"
-                            value={logo}
-                            onChange={(file) => {
-                              setLogo(file);
-                            }}
+                            hiddenLabel
+                            id="imagen"
+                            sx={{ visibility: "hidden" }}
+                            value={imagen}
+                            onChange={handleChangeImagen}
                           />
+
                           <EditIcon fontSize="small" />
                         </Button>
                       </Box>
@@ -153,12 +186,53 @@ export default function CardDesplegadaEdit({
                       />
                     </>
                   ) : (
-                    <img
-                      className="imagen-card"
-                      src={"../../src/assets/default.jpg"}
-                      alt="imagen"
+                    <MuiFileInput
+                      // sx={{display:"none"}}
+                      sx={{ mt: 3, width: "70%" }}
+                      label="imagen"
+                      id="IMAGEN"
+                      name="IMAGEN"
+                      value={imagen}
+                      onChange={handleChangeImagen}
                     />
                   )}
+                </Grid>
+                <Grid item xs={12} sx={{ pt: 12, ml: 3 }}>
+                  <Button
+                    onClick={handleClickOpen}
+                    variant="contained"
+                    sx={{
+                      minWidth: "0px",
+                      color: "#f7f7f7",
+                      borderRadius: "40px",
+                      backgroundColor: "#9f5555",
+                    }}
+                  >
+                    X
+                  </Button>
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Estás seguro de que deseas eliminar esta entrada?"}
+                    </DialogTitle>
+                    {/* <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Let Google help apps determine location. This means
+                        sending anonymous location data to Google, even when no
+                        apps are running.
+                      </DialogContentText>
+                    </DialogContent> */}
+                    <DialogActions>
+                      <Button onClick={handleClose}>No</Button>
+                      <Button onClick={eliminarCard} autoFocus>
+                        Si, eliminar entrada
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </Grid>
               </Grid>
 
@@ -181,6 +255,7 @@ export default function CardDesplegadaEdit({
                     item={item}
                     edit={edit}
                     values={props.values}
+                    imagen={imagen}
                   />
                 </Grid>
                 <Grid
@@ -210,14 +285,6 @@ export default function CardDesplegadaEdit({
                   />{" "}
                 </Grid>
                 <Grid item xs={12} sx={{ pt: 1 }}>
-                  {/* <motion.div
-                    animate={{
-                      scale: [1, 1.3, 1.3, 1, 1],
-                      rotate: [0, 0, 90, 90, 0],
-                      borderRadius: ["20%", "20%", "50%", "50%", "20%"],
-                      transition: { duration: 1.5 },
-                    }}
-                  > */}
                   <TextField
                     id="nota"
                     name="nota"

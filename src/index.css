@@ -34,13 +34,26 @@ body{
 }
 
 .main-main{
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; */
   background-color: #efefef;
   width: 100vw;
   min-height:100vh;
   height: 100%;
+}
+
+.h1-main{
+  margin-left:14%;
+  font-weight: bold;
+  padding:24px;
+  font-size: 64px;
+  color:#b5b5b5;
+  text-shadow: 2px 2px #000 ;
+}
+
+.title-image{
+  margin-left: 32px;
 }
 
 .imagen-card{
@@ -76,5 +89,55 @@ body{
   height:30px;
   background-color:white;
   border-radius: 40px;
+}
+
+.css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root{
+  visibility: hidden;
+}
+
+.pending-list{
+  display: flex;
+  flex-direction: row;
+  flex-wrap:wrap
+}
+
+.pending-list span{
+  margin:10px;
+  font-style: italic;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.pending-title{
+  font-size: 1.5em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  margin-left:24px;
+  margin-bottom:24px;
+}
+
+.ul-top{
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  padding-inline-start: 0px;
+}
+
+.li-top{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  align-content: flex-start;
+  margin:4px;
+}
+
+.span-top{
+  margin-left: 8px;
+  padding:6px;
+  background-color: #c5efc5;
+  border: 1px solid green;
+  border-radius: 50% ;
+  color: #dd9d09;
 }
 

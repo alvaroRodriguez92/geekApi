@@ -1,4 +1,4 @@
-import {useState} from "react"
+import { useState } from "react";
 import { Grid, Button, TextField } from "@mui/material";
 import { useCardContext } from "../../Context/cardContext";
 import { motion } from "framer-motion";
@@ -7,34 +7,36 @@ import { MuiFileInput } from "mui-file-input";
 import { cardSchema } from "./cardSchema";
 import { Add, type CardInterface } from "../../types";
 
-
-export default function CardNueva({add}:Add) {
-  const [imagen, setImagen] = useState<File|null|undefined>()
-  const {tema} = useCardContext()
-
+export default function CardNueva({ add }: Add) {
+  const [imagen, setImagen] = useState<File | null | undefined>();
+  const { tema, infoTema, año } = useCardContext();
 
   async function onSubmit(values: CardInterface) {
-    console.log(imagen)
     const formData = new FormData();
-    formData.append("nombre", values.nombre)
-    formData.append("comentario", JSON.stringify(values.comentario))
-    formData.append("nota", JSON.stringify(values.nota))
-    if(imagen){
-      formData.append("imagen", imagen)
-
+    let nota = "";
+    if (values) {
+      console.log(values);
+      formData.append("nombre", values.nombre);
+      if (values.comentario) formData.append("comentario", values.comentario);
+      if (values.nota) {
+        nota = values.nota.toString();
+        formData.append("nota", nota);
+      }
     }
-   
+    if (imagen) formData.append("imagen", imagen);
+
     const response = await fetch(`http://localhost:3000/${tema}/`, {
-    method:"POST",
-    body: formData
+      method: "POST",
+      body: formData,
     });
-    if(response.status==200){
-      add()
+    if (response.ok) {
+      infoTema(tema,año)
+      add();
     }
   }
 
-  function handleChangeImagen(value:File|null|undefined){
-    setImagen(value)
+  function handleChangeImagen(value: File | null | undefined) {
+    setImagen(value);
   }
 
   const initialValues: CardInterface = {
@@ -111,12 +113,13 @@ export default function CardNueva({add}:Add) {
                   </motion.h2>
                 </Grid>
                 <Grid item xs={12}>
-                  {/* <img
-                  className="imagen-card"
-                  src={"../../src/assets/default.jpg"}
-                  alt="imagen"
-                /> */}
-                  <MuiFileInput id="imagen" sx={{mt:12, ml:3}} label="Imagen" value={imagen} onChange={handleChangeImagen} />
+                  <MuiFileInput
+                    id="imagen"
+                    sx={{ mt: 12, ml: 3 }}
+                    label="Imagen"
+                    value={imagen}
+                    onChange={handleChangeImagen}
+                  />
                 </Grid>
               </Grid>
 
@@ -137,9 +140,16 @@ export default function CardNueva({add}:Add) {
                     display: "flex",
                     justifyContent: "flex-end",
                   }}
-                ><Button color="secondary"
-                variant="contained"
-                size="small" onClick={add} sx={{mr:2}}>Cancelar</Button>
+                >
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    size="small"
+                    onClick={add}
+                    sx={{ mr: 2 }}
+                  >
+                    Cancelar
+                  </Button>
                   <Button
                     color="secondary"
                     variant="contained"
@@ -194,7 +204,7 @@ export default function CardNueva({add}:Add) {
                   <TextField
                     name="nota"
                     id="nota"
-                    inputProps={{min:0, max:10, step:.1, color:"white"}}
+                    inputProps={{ min: 0, max: 10, step: 0.1, color: "white" }}
                     type="number"
                     error={props.errors.nota && props.touched.nota}
                     onBlur={props.handleBlur}
@@ -202,7 +212,7 @@ export default function CardNueva({add}:Add) {
                     value={props.values.nota}
                     variant="standard"
                     placeholder="Nota"
-                    sx={{ input: { color: "white", min:0, max:10 } }}
+                    sx={{ input: { color: "white", min: 0, max: 10 } }}
                   />
                 </Grid>
               </Grid>

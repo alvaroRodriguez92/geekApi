@@ -24,7 +24,7 @@ export default function CardDesplegada({
       }
     }
   }
-
+  
   return (
     <motion.div
       initial={{ opacity: 1, scale: 1 }}

@@ -74,8 +74,17 @@ peliculasController.addPelicula = async (req, res) => {
 //Modificar pelicula
 peliculasController.updatePelicula = async (req, res) => {
   const { id } = req.params;
-  const { nombre, fecha, comentario, imagen, nota } = req.body;
-
+  console.log(req.body,"reqbodyy")
+  const { nombre, comentario, nota } = req.body;
+  let nombreImagen="";
+  if(req.files){
+    const {imagen} = req.files;
+    nombreImagen = imagen.name;
+    let uploadPath = path.join(__dirname, "../public/uploadImages/"+imagen.name)
+    await imagen.mv(uploadPath, err=>{
+      if(err) return res.status(500).send(err)
+    })
+  } 
   try {
     if (!id) {
       res
@@ -85,9 +94,8 @@ peliculasController.updatePelicula = async (req, res) => {
     const updatedPelicula = {
       id: id,
       nombre: nombre,
-      fecha: fecha,
       comentario: comentario,
-      imagen: imagen,
+      imagen: nombreImagen,
       nota: nota,
     };
 
@@ -101,6 +109,24 @@ peliculasController.updatePelicula = async (req, res) => {
     throw new Error(e);
   }
 };
+
+//Endpoint para eliminar imagen
+peliculasController.deletePeliculaImage = async(req, res)=>{
+  try{
+    const {id} = req.params
+    if(!id){
+      res.status(404).send("Id no encontrada")
+    }
+    
+    const data = await dao.deletePeliculaImage(id)
+    if(!data){
+      res.status(400).send("Error al eliminar la imagen")
+    }
+    return res.status(200).send("Imagen eliminada")
+  } catch(e){
+    throw new Error(e)
+  }
+}
 
 //Eliminar pelicula
 peliculasController.deletePelicula = async (req, res) => {
@@ -131,6 +157,77 @@ peliculasController.getYears = async (req, res) => {
       return year.años;
     });
     res.status(200).send(years);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+//Endpoint para buscar pelicula
+peliculasController.searchPelicula = async (req,res)=>{
+  console.log(req.body,"???xd")
+  try{
+    const {nombre} = req.body
+    const pelicula= await dao.searchPelicula(nombre)
+    if(!pelicula){
+      return res.status(404).send("Pelicula no encontrado")
+    }
+    return res.status(200).send(pelicula)
+
+  } catch(e){
+    throw new Error(e)
+  }
+}
+
+//Endpoint para añadir pendiente
+peliculasController.addPeliculaPendiente = async(req, res)=>{
+  try{
+    const {nombre} = req.body
+    if(!nombre) res.status(404).send("No se ha recibido el nombre")
+
+    const data = await dao.addPeliculaPendiente(nombre)
+    if(!data) return res.status(400).send("Error al añadir la pelicula")
+    if(data) {
+      const newPendientes = await dao.getPeliculasPendientes()
+      return res.status(200).send(newPendientes)
+    }
+  } catch(e){
+    throw new Error (e)
+  }
+}
+
+//Endpoint para conseguir los pendientes
+peliculasController.getPeliculasPendientes = async (req, res) =>{
+  
+  try{
+    const data = await dao.getPeliculasPendientes()
+    if(data) return res.status(200).send(data)
+
+  } catch(e){
+    throw new Error(e)
+  }
+}
+
+//Endpoint para eliminar pendiente
+peliculasController.deletePendiente = async (req,res) =>{
+  try{
+    const {id} = req.params;
+    if(!id) return res.sendStatus(400).send("No se ha encontrado el id")
+    const data = await dao.deleteQuery(id)
+    if(data) {
+      const newPendientes = await dao.getPeliculasPendientes()
+      return res.status(200).send(newPendientes)
+    }
+
+  } catch(e){
+    throw new Error(e)
+  }
+}
+
+//Endpoint para conseguir el top 5
+peliculasController.getTopPeliculas = async (req, res) => {
+  try {
+    const data = await dao.getTopPeliculas();
+    if (data) return res.status(200).send(data);
   } catch (e) {
     throw new Error(e);
   }

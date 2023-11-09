@@ -40,8 +40,6 @@ seriesController.getSeriesByYear  = async (req, res) => {
 
 seriesController.addSerie = async (req, res) => {
   try {
-    console.log(req.body,"BODYY");
-
     let nombreImagen ="";
 
     const { id, nombre, comentario, nota } = req.body;
@@ -62,7 +60,6 @@ seriesController.addSerie = async (req, res) => {
       imagen: nombreImagen,
       nota: nota,
     };
-    console.log(newSerie, "NUEVVA SERIEE")
     const data = await dao.addSerie(newSerie);
     if (!data) {
       res.status(400).send("Error al añadir serie");
@@ -77,13 +74,21 @@ seriesController.addSerie = async (req, res) => {
 seriesController.updateSerie = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre, fecha, comentario, imagen, nota } = req.body;
+    const { nombre, comentario, nota } = req.body;
+    let nombreImagen ="";
+    if(req.files){
+      const {imagen} = req.files;
+      nombreImagen = imagen.name;
+      let uploadPath = path.join(__dirname,"../public/uploadImages/"+nombreImagen)
+      await imagen.mv(uploadPath, err=>{
+        if(err) return res.status(500).send(err)
+       })
+    }
     const updatedSerie = {
       id: id,
       nombre: nombre,
-      fecha: fecha,
       comentario: comentario,
-      imagen: imagen,
+      imagen: nombreImagen,
       nota: nota,
     };
 
@@ -97,6 +102,24 @@ seriesController.updateSerie = async (req, res) => {
     throw new Error(e);
   }
 };
+
+//Endpoint para eliminar imagen
+seriesController.deleteSerieImage = async(req, res)=>{
+  try{
+    const {id} = req.params
+    if(!id){
+      res.status(404).send("Id no encontrada")
+    }
+    
+    const data = await dao.deleteSerieImage(id)
+    if(!data){
+      res.status(400).send("Error al eliminar la imagen")
+    }
+    return res.status(200).send("Imagen eliminada")
+  } catch(e){
+    throw new Error(e)
+  }
+}
 
 //Eliminar serie
 
@@ -128,6 +151,78 @@ seriesController.getYears = async (req, res) => {
       return year.años;
     });
     res.status(200).send(years);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+//Endpoint para buscar serie
+seriesController.searchSerie = async (req,res)=>{
+  try{
+    const {nombre} = req.body
+
+    const serie= await dao.searchSerie(nombre)
+    if(!serie){
+      return res.status(404).send("Serie no encontrado")
+    }
+    return res.status(200).send(serie)
+
+  } catch(e){
+    throw new Error(e)
+  }
+}
+
+//Endpoint para añadir pendiente
+seriesController.addSeriePendiente = async(req, res)=>{
+  console.log(req.body)
+  try{
+    const {nombre} = req.body
+    if(!nombre) res.status(404).send("No se ha recibido el nombre")
+
+    const data = await dao.addSeriePendiente(nombre)
+    if(!data) return res.status(400).send("Error al añadir la serie")
+    if(data) {
+      const newPendientes = await dao.getSeriesPendientes()
+      return res.status(200).send(newPendientes)
+    }
+  } catch(e){
+    throw new Error (e)
+  }
+}
+
+//Endpoint para conseguir los pendientes
+seriesController.getSeriesPendientes = async (req, res) =>{
+  
+  try{
+    const data = await dao.getSeriesPendientes()
+    if(data) return res.status(200).send(data)
+
+  } catch(e){
+    throw new Error(e)
+  }
+}
+
+//Endpoint para eliminar pendiente
+seriesController.deletePendiente = async (req,res) =>{
+  try{
+    const {id} = req.params;
+    if(!id) return res.sendStatus(400).send("No se ha encontrado el id")
+    const data = await dao.deleteQuery(id)
+    if(data) {
+      const newPendientes = await dao.getSeriesPendientes()
+      return res.status(200).send(newPendientes)
+    }
+
+  } catch(e){
+    throw new Error(e)
+  }
+}
+
+//Endpoint para conseguir el top 5
+seriesController.getTopSeries = async (req, res) => {
+  try {
+    const data = await dao.getTopSeries();
+    if (data) return res.status(200).send(data);
   } catch (e) {
     throw new Error(e);
   }

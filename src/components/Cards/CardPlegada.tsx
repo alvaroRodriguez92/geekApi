@@ -1,7 +1,6 @@
-import { Grid } from "@mui/material";
+import { Grid,Button } from "@mui/material";
 import Moment from "react-moment";
 import {  DespliegueProps } from "../../types";
-// import { SetDespliegueProp } from "./Card";
 import { motion } from "framer-motion";
 
 export default function CardPlegada({
@@ -9,14 +8,13 @@ export default function CardPlegada({
   desplegar,
   despliegue,
 }: DespliegueProps) {
-  function elegirColor(nota: string | undefined) {
+  function elegirColor(nota: number | undefined) {
     if (nota !== undefined) {
-      const notaDecimal = Number.parseFloat(nota);
-      if (notaDecimal < 6) {
+      if (nota < 6) {
         return "#ff1b1b";
-      } else if (notaDecimal < 8 && notaDecimal >= 6) {
+      } else if (nota < 8 && nota >= 6) {
         return "#dddd5a";
-      } else if (notaDecimal >= 8) {
+      } else if (nota >= 8) {
         return "#62ad62";
       }
     }

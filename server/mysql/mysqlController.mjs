@@ -27,7 +27,7 @@ animeQueries.getAnimes = async (id) => {
 animeQueries.getAnimeByYear = async (year) => {
   let conn = null;
   try {
-    const año = `%${year}%`
+    const año = `%${year}%`;
     conn = await db.createConnection();
     //db.query recibe la sqlquery, los params, type y la conexion
 
@@ -72,6 +72,7 @@ animeQueries.updateAnime = async (id, newData) => {
       id: newData.id,
       nombre: newData.nombre,
       fecha: newData.fecha,
+      nota: newData.nota,
       comentario: newData.comentario,
       imagen: newData.imagen,
       nota: newData.nota,
@@ -80,6 +81,19 @@ animeQueries.updateAnime = async (id, newData) => {
     await utils.removeUndefinedKeys(update);
 
     return await db.query(querys.updateAnime, [update, id], "update", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Eliminar imagen anime
+animeQueries.deleteAnimeImage = async (id) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.deleteAnimeImage, id, "update", conn);
   } catch (e) {
     throw new Error(e);
   } finally {
@@ -105,7 +119,6 @@ animeQueries.getYears = async () => {
   let conn = null;
   try {
     conn = await db.createConnection();
-    console.log("llego aqui???")
     return await db.query(querys.getYearsAnime, "", "select", conn);
   } catch (e) {
     throw new Error(e);
@@ -113,6 +126,59 @@ animeQueries.getYears = async () => {
     conn && (await conn.end());
   }
 };
+
+//Buscar anime
+animeQueries.searchAnime = async (name) => {
+  let conn = null;
+  const nombre = `%${name}%`;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.searchAnime, nombre, "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Añadir pendiente anime
+animeQueries.addAnimePendiente = async (nombre) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.addPendienteAnime, nombre, "insert", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Get pendientes de anime
+animeQueries.getAnimePendientes = async () => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.getPendientesAnime, "", "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Get top 5 animes
+animeQueries.getTopAnime = async()=>{
+  let conn = null
+  try{
+    conn = await db.createConnection()
+    return await db.query(querys.getTopAnime,"","select", conn)
+  } catch(e){
+    throw new Error(e)
+  } finally{
+    conn && await conn.end()
+  }
+}
 
 //***************
 //VIDEOJUEGOS****
@@ -134,11 +200,10 @@ videogamesQueries.getVideojuegos = async (id) => {
 };
 
 //Query para obtener videojuegos según el año
-
 videogamesQueries.getVideojuegosByYear = async (year) => {
   let conn = null;
   try {
-    const año = `%${year}%`
+    const año = `%${year}%`;
     conn = await db.createConnection();
     //db.query recibe la sqlquery, los params, type y la conexion
     return await db.query(querys.getVideojuegosByYear, año, "select", conn);
@@ -180,6 +245,7 @@ videogamesQueries.updateVideojuego = async (id, newData) => {
       id: newData.id,
       nombre: newData.nombre,
       fecha: newData.fecha,
+      nota: newData.nota,
       comentario: newData.comentario,
       imagen: newData.imagen,
     };
@@ -192,6 +258,19 @@ videogamesQueries.updateVideojuego = async (id, newData) => {
       "update",
       conn
     );
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Eliminar imagen videojuego
+videogamesQueries.deleteVideojuegoImage = async (id) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.deleteVideojuegoImage, id, "update", conn);
   } catch (e) {
     throw new Error(e);
   } finally {
@@ -226,6 +305,64 @@ videogamesQueries.getYears = async () => {
   }
 };
 
+//Buscar videojuego
+videogamesQueries.searchVideojuego = async (name) => {
+  let conn = null;
+  const nombre = `%${name}%`;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.searchVideojuego, nombre, "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Añadir pendiente videojuegos
+videogamesQueries.addVideojuegoPendiente = async (nombre) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(
+      querys.addPendienteVideojuego,
+      nombre,
+      "insert",
+      conn
+    );
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Get pendientes de videojuegos
+videogamesQueries.getVideojuegosPendientes = async () => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.getPendientesVideojuegos, "", "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Get top 5 videojuegos
+videogamesQueries.getTopVideojuegos = async()=>{
+  let conn = null
+  try{
+    conn = await db.createConnection()
+    return await db.query(querys.getTopVideojuegos,"","select", conn)
+  } catch(e){
+    throw new Error(e)
+  } finally{
+    conn && await conn.end()
+  }
+}
+
 //***************
 //SERIES*********
 //***************
@@ -246,11 +383,10 @@ seriesQueries.getSeries = async (id) => {
 };
 
 //Query para obtener series según el año
-
 seriesQueries.getSeriesByYear = async (year) => {
   let conn = null;
   try {
-    const año = `%${year}%`
+    const año = `%${year}%`;
     conn = await db.createConnection();
     //db.query recibe la sqlquery, los params, type y la conexion
     return await db.query(querys.getSeriesByYear, año, "select", conn);
@@ -262,7 +398,6 @@ seriesQueries.getSeriesByYear = async (year) => {
 };
 
 //Añadir serie
-
 seriesQueries.addSerie = async (newSerie) => {
   let conn = null;
   try {
@@ -284,7 +419,6 @@ seriesQueries.addSerie = async (newSerie) => {
 };
 
 //Editar serie
-
 seriesQueries.updateSerie = async (id, newData) => {
   let conn = null;
   try {
@@ -293,6 +427,7 @@ seriesQueries.updateSerie = async (id, newData) => {
       id: newData.id,
       nombre: newData.nombre,
       fecha: newData.fecha,
+      nota: newData.nota,
       comentario: newData.comentario,
       comentario: newData.comentario,
       imagen: newData.imagen,
@@ -301,6 +436,19 @@ seriesQueries.updateSerie = async (id, newData) => {
     await utils.removeUndefinedKeys(update);
 
     return await db.query(querys.updateSerie, [update, id], "update", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Eliminar imagen serie
+seriesQueries.deleteSerieImage = async (id) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.deleteSerieImage, id, "update", conn);
   } catch (e) {
     throw new Error(e);
   } finally {
@@ -335,6 +483,59 @@ seriesQueries.getYears = async () => {
   }
 };
 
+//Buscar serie
+seriesQueries.searchSerie = async (name) => {
+  let conn = null;
+  const nombre = `%${name}%`;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.searchSerie, nombre, "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Añadir pendiente serie
+seriesQueries.addSeriePendiente = async (nombre) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.addPendienteSerie, nombre, "insert", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Get pendientes de series
+seriesQueries.getSeriesPendientes = async () => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.getPendientesSeries, "", "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Get top 5 series
+seriesQueries.getTopSeries = async()=>{
+  let conn = null
+  try{
+    conn = await db.createConnection()
+    return await db.query(querys.getTopSeries,"","select", conn)
+  } catch(e){
+    throw new Error(e)
+  } finally{
+    conn && await conn.end()
+  }
+}
+
 //***************
 //PELICULAS******
 //***************
@@ -353,11 +554,10 @@ peliculasQueries.getPeliculas = async (id) => {
 };
 
 //Query para obtener peliculas según el año
-
 peliculasQueries.getPeliculasByYear = async (year) => {
   let conn = null;
   try {
-    const año = `%${year}%`
+    const año = `%${year}%`;
     conn = await db.createConnection();
     //db.query recibe la sqlquery, los params, type y la conexion
     return await db.query(querys.getPeliculasByYear, año, "select", conn);
@@ -397,6 +597,7 @@ peliculasQueries.updatePelicula = async (id, newData) => {
     let update = {
       id: newData.id,
       nombre: newData.nombre,
+      nota: newData.nota,
       fecha: newData.fecha,
       comentario: newData.comentario,
       imagen: newData.imagen,
@@ -405,6 +606,19 @@ peliculasQueries.updatePelicula = async (id, newData) => {
     await utils.removeUndefinedKeys(update);
 
     return await db.query(querys.updatePelicula, [update, id], "update", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Eliminar imagen pelicula
+peliculasQueries.deletePeliculaImage = async (id) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.deletePeliculaImage, id, "update", conn);
   } catch (e) {
     throw new Error(e);
   } finally {
@@ -438,10 +652,80 @@ peliculasQueries.getYears = async () => {
   }
 };
 
+//Buscar pelicula
+peliculasQueries.searchPelicula = async (name) => {
+  let conn = null;
+  const nombre = `%${name}%`;
+  console.log("llego aqui", nombre);
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.searchPelicula, nombre, "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Añadir pendiente pelicula
+peliculasQueries.addPeliculaPendiente = async (nombre) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.addPendientePelicula, nombre, "insert", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Get pendientes de peliculas
+peliculasQueries.getPeliculasPendientes = async () => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.getPendientesPeliculas, "", "select", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
+//Get top 5 videojuegos
+peliculasQueries.getTopPeliculas = async()=>{
+  let conn = null
+  try{
+    conn = await db.createConnection()
+    return await db.query(querys.getTopPeliculas,"","select", conn)
+  } catch(e){
+    throw new Error(e)
+  } finally{
+    conn && await conn.end()
+  }
+}
+
+//Delete pendiente para todos
+let deleteQuery = {};
+
+deleteQuery.eliminarPendiente = async (id) => {
+  let conn = null;
+  try {
+    conn = await db.createConnection();
+    return await db.query(querys.eliminarPendiente, id, "delete", conn);
+  } catch (e) {
+    throw new Error(e);
+  } finally {
+    conn && (await conn.end());
+  }
+};
+
 //Exportamos todas las funciones (no olvidar desestructurar al importar)
 export default {
   animeQueries,
   videogamesQueries,
   seriesQueries,
   peliculasQueries,
+  deleteQuery,
 };
